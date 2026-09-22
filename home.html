@@ -1,0 +1,272 @@
+```
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards - Modo Estudo</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+h1,h2{
+    text-align: center;
+}
+
+input{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+button{
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#estudoCard{
+    border: 2px solid #333;
+    border-radius: 10px;
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+#contador{
+    text-align: center;
+    font-weight: bold;
+}
+
+#controles{
+    text-align: center;
+}
+
+.lista-card{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Flashcards</h1>
+
+<label>Pergunta</label>
+<input type="text" id="pergunta">
+
+<label>Resposta</label>
+<input type="text" id="resposta">
+
+<button onclick="adicionar()">Adicionar Flashcard</button>
+
+<hr>
+
+<h2>Modo Estudo</h2>
+
+<div id="estudoCard">
+Nenhum flashcard cadastrado
+</div>
+
+<div id="controles">
+    <button onclick="anterior()">Anterior</button>
+    <button onclick="mostrarResposta()">Mostrar Resposta</button>
+    <button onclick="proximo()">Próximo</button>
+</div>
+
+<p id="contador"></p>
+
+<hr>
+
+<h2>Flashcards Cadastrados</h2>
+
+<div id="lista"></div>
+
+<script>
+
+let flashcards = JSON.parse(localStorage.getItem("flashcards")) || [];
+
+let indiceAtual = 0;
+let mostrandoResposta = false;
+
+function salvarDados(){
+    localStorage.setItem(
+        "flashcards",
+        JSON.stringify(flashcards)
+    );
+}
+
+function adicionar(){
+
+    let pergunta =
+        document.getElementById("pergunta").value.trim();
+
+    let resposta =
+        document.getElementById("resposta").value.trim();
+
+    if(pergunta === "" || resposta === ""){
+        alert("Preencha todos os campos.");
+        return;
+    }
+
+    flashcards.push({
+        pergunta: pergunta,
+        resposta: resposta
+    });
+
+    salvarDados();
+
+    document.getElementById("pergunta").value = "";
+    document.getElementById("resposta").value = "";
+
+    atualizarLista();
+    atualizarModoEstudo();
+}
+
+function atualizarModoEstudo(){
+
+    let card = document.getElementById("estudoCard");
+    let contador = document.getElementById("contador");
+
+    if(flashcards.length === 0){
+
+        card.innerHTML = "Nenhum flashcard cadastrado";
+        contador.innerHTML = "";
+
+        return;
+    }
+
+    if(indiceAtual >= flashcards.length){
+        indiceAtual = 0;
+    }
+
+    if(mostrandoResposta){
+        card.innerHTML =
+            flashcards[indiceAtual].resposta;
+    }
+    else{
+        card.innerHTML =
+            flashcards[indiceAtual].pergunta;
+    }
+
+    contador.innerHTML =
+        "Flashcard " +
+        (indiceAtual + 1) +
+        " de " +
+        flashcards.length;
+}
+
+function mostrarResposta(){
+
+    if(flashcards.length === 0){
+        return;
+    }
+
+    mostrandoResposta = !mostrandoResposta;
+
+    atualizarModoEstudo();
+}
+
+function proximo(){
+
+    if(flashcards.length === 0){
+        return;
+    }
+
+    indiceAtual++;
+
+    if(indiceAtual >= flashcards.length){
+        indiceAtual = 0;
+    }
+
+    mostrandoResposta = false;
+
+    atualizarModoEstudo();
+}
+
+function anterior(){
+
+    if(flashcards.length === 0){
+        return;
+    }
+
+    indiceAtual--;
+
+    if(indiceAtual < 0){
+        indiceAtual = flashcards.length - 1;
+    }
+
+    mostrandoResposta = false;
+
+    atualizarModoEstudo();
+}
+
+function excluir(indice){
+
+    flashcards.splice(indice, 1);
+
+    salvarDados();
+
+    if(indiceAtual >= flashcards.length){
+        indiceAtual = flashcards.length - 1;
+    }
+
+    if(indiceAtual < 0){
+        indiceAtual = 0;
+    }
+
+    atualizarLista();
+    atualizarModoEstudo();
+}
+
+function atualizarLista(){
+
+    let lista =
+        document.getElementById("lista");
+
+    lista.innerHTML = "";
+
+    flashcards.forEach((card, indice)=>{
+
+        lista.innerHTML += `
+            <div class="lista-card">
+                <strong>Pergunta:</strong>
+                ${card.pergunta}
+                <br><br>
+
+                <strong>Resposta:</strong>
+                ${card.resposta}
+                <br><br>
+
+                <button onclick="excluir(${indice})">
+                    Excluir
+                </button>
+            </div>
+        `;
+    });
+}
+
+atualizarLista();
+atualizarModoEstudo();
+
+</script>
+
+</body>
+</html>
