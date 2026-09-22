@@ -9,18 +9,17 @@
 
     <h1>Cadastro de Flashcards</h1>
 
-    <input type="text" id="pergunta" placeholder="Pergunta">
+    <input type="text" id="pergunta" placeholder="Digite a pergunta">
 
-    <input type="text" id="resposta" placeholder="Resposta">
+    <input type="text" id="resposta" placeholder="Digite a resposta">
 
-    <button onclick="adicionar()">Adicionar</button>
-
-    <hr>
+    <button onclick="adicionar()">Adicionar Flashcard</button>
 
     <a href="estudo.html">
-        <button>Ir para Estudo</button>
+        <button>Modo Estudo</button>
     </a>
 
+    <button onclick="limpar()">Limpar pergunta</button>
     <div id="lista"></div>
 
     <script src="script.js"></script>

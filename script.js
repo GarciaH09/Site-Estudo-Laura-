@@ -4,7 +4,14 @@ let flashcards =
 let indiceAtual = 0;
 let mostrandoResposta = false;
 
-function salvar(){
+let acertos =
+    Number(localStorage.getItem("acertos")) || 0;
+
+let erros =
+    Number(localStorage.getItem("erros")) || 0;
+
+function salvarFlashcards(){
+
     localStorage.setItem(
         "flashcards",
         JSON.stringify(flashcards)
@@ -14,21 +21,22 @@ function salvar(){
 function adicionar(){
 
     let pergunta =
-        document.getElementById("pergunta").value;
+        document.getElementById("pergunta").value.trim();
 
     let resposta =
-        document.getElementById("resposta").value;
+        document.getElementById("resposta").value.trim();
 
-    if(!pergunta || !resposta){
+    if(pergunta === "" || resposta === ""){
+        alert("Preencha todos os campos.");
         return;
     }
 
     flashcards.push({
-        pergunta,
-        resposta
+        pergunta: pergunta,
+        resposta: resposta
     });
 
-    salvar();
+    salvarFlashcards();
 
     document.getElementById("pergunta").value = "";
     document.getElementById("resposta").value = "";
@@ -40,7 +48,7 @@ function excluir(indice){
 
     flashcards.splice(indice,1);
 
-    salvar();
+    salvarFlashcards();
 
     listar();
 }
@@ -50,7 +58,9 @@ function listar(){
     let lista =
         document.getElementById("lista");
 
-    if(!lista) return;
+    if(!lista){
+        return;
+    }
 
     lista.innerHTML = "";
 
@@ -58,14 +68,19 @@ function listar(){
 
         lista.innerHTML += `
         <div class="item">
-            <b>${card.pergunta}</b>
-            <br>
+            <strong>Pergunta:</strong>
+            ${card.pergunta}
+            <br><br>
+
+            <strong>Resposta:</strong>
             ${card.resposta}
             <br><br>
+
             <button onclick="excluir(${indice})">
                 Excluir
             </button>
-        </div>`;
+        </div>
+        `;
     });
 }
 
@@ -77,19 +92,35 @@ function atualizarEstudo(){
     let contador =
         document.getElementById("contador");
 
-    if(!card) return;
-
-    if(flashcards.length === 0){
-        card.innerHTML =
-            "Nenhum flashcard cadastrado";
+    if(!card){
         return;
     }
 
-    card.innerHTML = mostrandoResposta
-        ? flashcards[indiceAtual].resposta
-        : flashcards[indiceAtual].pergunta;
+    if(flashcards.length === 0){
+
+        card.innerHTML =
+            "Nenhum flashcard cadastrado";
+
+        contador.innerHTML = "";
+
+        return;
+    }
+
+    if(indiceAtual >= flashcards.length){
+        indiceAtual = 0;
+    }
+
+    if(mostrandoResposta){
+        card.innerHTML =
+            flashcards[indiceAtual].resposta;
+    }
+    else{
+        card.innerHTML =
+            flashcards[indiceAtual].pergunta;
+    }
 
     contador.innerHTML =
+        "Flashcard " +
         (indiceAtual + 1) +
         " de " +
         flashcards.length;
@@ -105,6 +136,10 @@ function mostrarResposta(){
 
 function proximo(){
 
+    if(flashcards.length === 0){
+        return;
+    }
+
     indiceAtual++;
 
     if(indiceAtual >= flashcards.length){
@@ -118,6 +153,10 @@ function proximo(){
 
 function anterior(){
 
+    if(flashcards.length === 0){
+        return;
+    }
+
     indiceAtual--;
 
     if(indiceAtual < 0){
@@ -130,5 +169,95 @@ function anterior(){
     atualizarEstudo();
 }
 
+function atualizarPlacar(){
+
+    let placar =
+        document.getElementById("placar");
+
+    if(!placar){
+        return;
+    }
+
+    let total = acertos + erros;
+
+    let porcentagem = 0;
+
+    if(total > 0){
+        porcentagem =
+            ((acertos / total) * 100).toFixed(1);
+    }
+
+    placar.innerHTML =
+        "✅ Acertos: " + acertos +
+        " | ❌ Erros: " + erros +
+        " | 📊 Aproveitamento: " +
+        porcentagem + "%";
+}
+
+function acertou(){
+
+    acertos++;
+
+    localStorage.setItem(
+        "acertos",
+        acertos
+    );
+
+    atualizarPlacar();
+
+    proximo();
+}
+
+function errou(){
+
+    erros++;
+
+    localStorage.setItem(
+        "erros",
+        erros
+    );
+
+    atualizarPlacar();
+
+    proximo();
+}
+
+function resetarPontuacao(){
+
+    acertos = 0;
+    erros = 0;
+
+    localStorage.setItem(
+        "acertos",
+        0
+    );
+
+    localStorage.setItem(
+        "erros",
+        0
+    );
+
+    atualizarPlacar();
+}
+function virarCard(){
+
+    if(flashcards.length === 0){
+        return;
+    }
+
+    mostrandoResposta = !mostrandoResposta;
+
+    atualizarEstudo();
+}
+function limpar(){
+
+    flashcards = [];
+
+    localStorage.removeItem("flashcards");
+
+    listar();
+    atualizarEstudo();
+}
 listar();
 atualizarEstudo();
+atualizarPlacar();

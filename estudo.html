@@ -9,15 +9,32 @@
 
     <h1>Modo Estudo</h1>
 
-    <div id="card"></div>
-
-    <div>
-        <button onclick="anterior()">Anterior</button>
-        <button onclick="mostrarResposta()">Mostrar Resposta</button>
-        <button onclick="proximo()">Próximo</button>
+    <div id="card" onclick="virarCard()">
+    Nenhum flashcard cadastrado
     </div>
 
     <p id="contador"></p>
+
+    <div>
+        <button onclick="anterior()">⬅ Anterior</button>
+        <button onclick="mostrarResposta()">👁 Mostrar Resposta</button>
+        <button onclick="proximo()">Próximo ➡</button>
+    </div>
+
+    <br>
+
+    <div>
+        <button onclick="acertou()">✅ Acertei</button>
+        <button onclick="errou()">❌ Errei</button>
+    </div>
+
+    <h3 id="placar"></h3>
+
+    <button onclick="resetarPontuacao()">
+        Zerar Estatísticas
+    </button>
+
+    <br><br>
 
     <a href="cadastro.html">
         <button>Voltar ao Cadastro</button>

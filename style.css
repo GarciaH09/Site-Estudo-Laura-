@@ -1,36 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body{
-    font-family: Arial, sans-serif;
-    max-width: 800px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f9;
+    color: #333;
+    max-width: 1000px;
     margin: auto;
-    padding: 20px;
+    padding: 30px;
+}
+
+h1{
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1e293b;
 }
 
 input{
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
+    padding: 14px;
+    margin-bottom: 15px;
+    border: 2px solid #dbe2ea;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+input:focus{
+    outline: none;
+    border-color: #2563eb;
 }
 
 button{
-    padding: 10px;
-    margin: 5px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-#card{
-    border: 2px solid black;
-    border-radius: 10px;
-    min-height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
-    font-size: 22px;
-    text-align: center;
-    padding: 20px;
+button:hover{
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+a{
+    text-decoration: none;
+}
+
+#lista{
+    margin-top: 25px;
 }
 
 .item{
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.item strong{
+    color: #0f172a;
+}
+
+#card{
+    background: white;
+    min-height: 250px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 30px 0;
+    transition: 0.3s;
+}
+
+#card:hover{
+    transform: scale(1.02);
+}
+
+#contador{
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#placar{
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.controles{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.painel{
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+hr{
+    border: none;
+    height: 1px;
+    background: #ddd;
+    margin: 25px 0;
+}
+
+@media (max-width: 600px){
+
+    body{
+        padding: 15px;
+    }
+
+    #card{
+        font-size: 22px;
+        min-height: 180px;
+    }
+
+    button{
+        width: 100%;
+    }
+}
+#card{
+    cursor: pointer;
 }
